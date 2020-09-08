@@ -1,11 +1,13 @@
 'use strict';
 const React = require('react');
-const {Text} = require('ink');
+const {Text, Color, Box} = require('ink');
+const FIELD_SIZE = 16;
+const FIELD_ROW = [...new Array(FIELD_SIZE).keys()]
 
 const App = ({name = 'Stranger'}) => (
-	<Text>
-		Hello, <Text color="green">{name}</Text>
-	</Text>
+  <Box>
+    <Text color='green'>Vim</Text><Text color='red'>Snake</Text>
+  </Box>
 );
 
 module.exports = App;
