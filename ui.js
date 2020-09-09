@@ -1,5 +1,7 @@
 'use strict';
 
+import useInterval from 'react-useinterval';
+
 const React = require('react');
 const PropTypes = require('prop-types');
 const {Text, Color, Box} = require('ink');

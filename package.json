@@ -17,7 +17,8 @@
 		"import-jsx": "^4.0.0",
 		"ink": "^3.0.5",
 		"meow": "^7.1.1",
-		"react": "^16.13.1"
+		"react": "^16.13.1",
+		"react-useinterval": "^1.0.2"
 	},
 	"devDependencies": {
 		"@ava/babel": "^1.0.1",
