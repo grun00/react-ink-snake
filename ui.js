@@ -20,6 +20,8 @@ let food = {
   y: Math.round(Math.random()*FIELD_SIZE)
 }
 
+let speed = 800;
+
 function getItem(x, y, snakeSegments){
   if(x === food.x && y === food.y){
     return <Text color='red'> O </Text>
@@ -47,6 +49,7 @@ function calcSnakePosition(segments, direction){
       x: Math.floor(Math.random() * FIELD_SIZE),
       y: Math.floor(Math.random() * FIELD_SIZE),
     }
+    speed === 100? 100 : speed - 20
     return [newHead, ...segments];
   }
 
@@ -64,6 +67,7 @@ function calcBoundary(x) {
   return x;
 }
 
+
 const App = () => {
   const [snakeSegments, setSnakeSegments] = React.useState([
       { x: 8, y: 8 },
@@ -71,11 +75,16 @@ const App = () => {
       { x: 8, y: 6 }
   ]);
 
+  const [head, ...tail] = snakeSegments;
+  const selfIntersect = tail.some(
+    segment => segment.x === head.x && segment.y === head.y
+  )
+
   const [direction, setDirection] = React.useState(DIRECTIONS.DOWN);
 
   useInterval(() =>{
     setSnakeSegments(segments => calcSnakePosition(segments, direction))
-  }, 1000)
+  }, selfIntersect? null : speed)
 
   useInput((input, key) =>{
     if(key.leftArrow){
