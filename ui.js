@@ -36,9 +36,20 @@ function getItem(x, y, snakeSegments){
 
 function calcSnakePosition(segments, direction){
   return segments.map(segment => ({
-    x: segment.x + direction.x,
-    y: segment.y + direction.y
+    x: calcBoundary(segment.x + direction.x),
+    y: calcBoundary(segment.y + direction.y)
   }));
+}
+
+function calcBoundary(x) {
+  if (x >= FIELD_SIZE){
+    return 0;
+  }
+  if (x < 0){
+    return FIELD_SIZE - 1;
+  }
+
+  return x;
 }
 
 const App = () => {
@@ -61,11 +72,11 @@ const App = () => {
 
   useInterval(() =>{
     setSnakeSegments(segments => calcSnakePosition(segments, direction))
-  }, 50)
+  }, 1000)
 
   return (
     <Box flexDirection='column' alignItems='center'>
-      <Text color='green'>Vi</Text><Text color='red'>Snake</Text>
+      <Text color='#000000'>Vi<Text color='#f94144' backgroundColor='#FFFFFF'>Snake</Text></Text>
         <Box flexDirection='column' >
           <Box flexDirection='column'>
             {FIELD_ROW.map(y => (
