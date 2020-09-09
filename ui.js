@@ -1,10 +1,10 @@
 'use strict';
 
 const useInterval = require('react-useinterval');
-
 const React = require('react');
+const { useState, useContext, useEffect } = require('react');
 const PropTypes = require('prop-types');
-const {Text, Color, Box} = require('ink');
+const {Text, Box, useInput} = require('ink');
 
 const FIELD_SIZE = 16;
 const FIELD_ROW = [...new Array(FIELD_SIZE).keys()];
@@ -15,7 +15,7 @@ const DIRECTIONS = {
   DOWN: { x: 0, y: 1 }
 }
 
-const food = {
+let food = {
   x: Math.round(Math.random()*FIELD_SIZE),
   y: Math.round(Math.random()*FIELD_SIZE)
 }
@@ -42,6 +42,14 @@ function calcSnakePosition(segments, direction){
     y: calcBoundary(head.y + direction.y)
   }
 
+  if(newHead.x === food.x && newHead.y === food.y){
+    food = {
+      x: Math.floor(Math.random() * FIELD_SIZE),
+      y: Math.floor(Math.random() * FIELD_SIZE),
+    }
+    return [newHead, ...segments];
+  }
+
   return [newHead, ...segments.slice(0, -1)];
 }
 
@@ -58,25 +66,31 @@ function calcBoundary(x) {
 
 const App = () => {
   const [snakeSegments, setSnakeSegments] = React.useState([
-      {
-        x: 8,
-        y: 8
-      },
-      {
-        x: 8,
-        y: 7
-      },
-      {
-        x: 8,
-        y: 6
-      }
+      { x: 8, y: 8 },
+      { x: 8, y: 7 },
+      { x: 8, y: 6 }
   ]);
 
-  const [direction, setDirection] = React.useState(DIRECTIONS.LEFT);
+  const [direction, setDirection] = React.useState(DIRECTIONS.DOWN);
 
   useInterval(() =>{
     setSnakeSegments(segments => calcSnakePosition(segments, direction))
   }, 1000)
+
+  useInput((input, key) =>{
+    if(key.leftArrow){
+      setDirection(DIRECTIONS.LEFT)
+    }
+    if(key.rightArrow){
+      setDirection(DIRECTIONS.RIGHT)
+    }
+    if(key.upArrow){
+      setDirection(DIRECTIONS.UP)
+    }
+    if(key.downArrow){
+      setDirection(DIRECTIONS.DOWN)
+    }
+  })
 
   return (
     <Box flexDirection='column' alignItems='center'>
