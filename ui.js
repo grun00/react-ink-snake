@@ -35,10 +35,14 @@ function getItem(x, y, snakeSegments){
 }
 
 function calcSnakePosition(segments, direction){
-  return segments.map(segment => ({
-    x: calcBoundary(segment.x + direction.x),
-    y: calcBoundary(segment.y + direction.y)
-  }));
+  const [head] = segments;
+
+  const newHead = {
+    x: calcBoundary(head.x + direction.x),
+    y: calcBoundary(head.y + direction.y)
+  }
+
+  return [newHead, ...segments.slice(0, -1)];
 }
 
 function calcBoundary(x) {
