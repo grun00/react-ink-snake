@@ -1,6 +1,6 @@
 'use strict';
 
-import useInterval from 'react-useinterval';
+const useInterval = require('react-useinterval');
 
 const React = require('react');
 const PropTypes = require('prop-types');
@@ -8,6 +8,12 @@ const {Text, Color, Box} = require('ink');
 
 const FIELD_SIZE = 16;
 const FIELD_ROW = [...new Array(FIELD_SIZE).keys()];
+const DIRECTIONS = {
+  RIGHT: { x: 1, y: 0 },
+  LEFT: { x: -1, y: 0 },
+  UP: { x: 0, y: -1 },
+  DOWN: { x: 0, y: 1 }
+}
 
 const food = {
   x: Math.round(Math.random()*FIELD_SIZE),
@@ -28,6 +34,13 @@ function getItem(x, y, snakeSegments){
   return <Text color='#761298'> . </Text>
 }
 
+function calcSnakePosition(segments, direction){
+  return segments.map(segment => ({
+    x: segment.x + direction.x,
+    y: segment.y + direction.y
+  }));
+}
+
 const App = () => {
   const [snakeSegments, setSnakeSegments] = React.useState([
       {
@@ -42,7 +55,13 @@ const App = () => {
         x: 8,
         y: 6
       }
-  ])
+  ]);
+
+  const [direction, setDirection] = React.useState(DIRECTIONS.LEFT);
+
+  useInterval(() =>{
+    setSnakeSegments(segments => calcSnakePosition(segments, direction))
+  }, 50)
 
   return (
     <Box flexDirection='column' alignItems='center'>
