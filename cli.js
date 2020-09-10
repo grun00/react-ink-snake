@@ -12,11 +12,10 @@ const cli = meow(`
 	  $ react-snake
 
 	Options
-		--name  Your name
+		--color color_name
 
 	Examples
-	  $ react-snake --name=Jane
-	  Hello, Jane
+	  $ react-snake --color=ff00ff
 `);
 
 render(React.createElement(ui, cli.flags));
