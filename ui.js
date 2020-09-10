@@ -51,7 +51,7 @@ function calcSnakePosition(segments, direction){
       x: Math.floor(Math.random() * FIELD_SIZE),
       y: Math.floor(Math.random() * FIELD_SIZE),
     }
-    speed === 100? 100 : speed - 20
+    speed = speed === 100? 100 : speed - 20
     score = score + 100
     return [newHead, ...segments];
   }
@@ -72,7 +72,8 @@ function calcBoundary(x) {
 
 function endGame(){
   speed = 0;
-  return gameOver = 1;
+  gameOver = 1;
+  return null
 }
 
 const App = ({}) => {
@@ -91,7 +92,7 @@ const App = ({}) => {
 
   useInterval(() =>{
     setSnakeSegments(segments => calcSnakePosition(segments, direction))
-  }, selfIntersect? null : speed)
+  }, selfIntersect? endGame() : speed)
 
   useInput((input, key) => {
     if(key.leftArrow || input === 'h'){
@@ -110,10 +111,15 @@ const App = ({}) => {
 
   return (
     <Box flexDirection='column' alignItems='center'>
-      <Box  borderStyle='classic' paddingX={12}>
-        <Text color='#0000FF'> Score: {score} <Text color='#10ff10'>Vi<Text color='#f94144'>Snake</Text></Text> Speed: {speed}</Text>
+      <Box  borderStyle='classic' paddingX={12} borderColor={gameOver === 1? '#FF0000' : '#fff'}>
+        <Text color='#ff00ff'>
+          Score: {score}
+          <Text color='#10ff10'>Vi<Text color='#f94144'>Snake</Text>
+          </Text>
+          Speed: {speed}
+        </Text>
       </Box>
-      <Box flexDirection='column' alignItems='center' borderStyle='classic' >
+      <Box flexDirection='column' alignItems='center' borderStyle='classic' borderColor={gameOver === 1? '#FF0000' : '#fff'}>
             <Box flexDirection='column' >
               <Box flexDirection='column'>
                 {FIELD_ROW.map(y => (
