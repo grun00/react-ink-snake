@@ -21,6 +21,8 @@ let food = {
 }
 
 let speed = 800;
+let gameOver = 0;
+let score = 0;
 
 function getItem(x, y, snakeSegments){
   if(x === food.x && y === food.y){
@@ -50,6 +52,7 @@ function calcSnakePosition(segments, direction){
       y: Math.floor(Math.random() * FIELD_SIZE),
     }
     speed === 100? 100 : speed - 20
+    score = score + 100
     return [newHead, ...segments];
   }
 
@@ -58,17 +61,21 @@ function calcSnakePosition(segments, direction){
 
 function calcBoundary(x) {
   if (x >= FIELD_SIZE){
-    return 0;
+    endGame();
   }
   if (x < 0){
-    return FIELD_SIZE - 1;
+    endGame();
   }
 
   return x;
 }
 
+function endGame(){
+  speed = 0;
+  return gameOver = 1;
+}
 
-const App = () => {
+const App = ({}) => {
   const [snakeSegments, setSnakeSegments] = React.useState([
       { x: 8, y: 8 },
       { x: 8, y: 7 },
@@ -86,36 +93,40 @@ const App = () => {
     setSnakeSegments(segments => calcSnakePosition(segments, direction))
   }, selfIntersect? null : speed)
 
-  useInput((input, key) =>{
-    if(key.leftArrow){
+  useInput((input, key) => {
+    if(key.leftArrow || input === 'h'){
       setDirection(DIRECTIONS.LEFT)
     }
-    if(key.rightArrow){
+    if(key.rightArrow || input === 'l'){
       setDirection(DIRECTIONS.RIGHT)
     }
-    if(key.upArrow){
+    if(key.upArrow || input === 'k'){
       setDirection(DIRECTIONS.UP)
     }
-    if(key.downArrow){
+    if(key.downArrow || input === 'j'){
       setDirection(DIRECTIONS.DOWN)
     }
   })
 
   return (
     <Box flexDirection='column' alignItems='center'>
-      <Text color='#000000'>Vi<Text color='#f94144' backgroundColor='#FFFFFF'>Snake</Text></Text>
-        <Box flexDirection='column' >
-          <Box flexDirection='column'>
-            {FIELD_ROW.map(y => (
-              <Box key={y}>
-                {FIELD_ROW.map(x => (
-                  <Box key={x}>
-                    {getItem(x, y, snakeSegments)}
+      <Box  borderStyle='classic' paddingX={12}>
+        <Text color='#0000FF'> Score: {score} <Text color='#10ff10'>Vi<Text color='#f94144'>Snake</Text></Text> Speed: {speed}</Text>
+      </Box>
+      <Box flexDirection='column' alignItems='center' borderStyle='classic' >
+            <Box flexDirection='column' >
+              <Box flexDirection='column'>
+                {FIELD_ROW.map(y => (
+                  <Box key={y}>
+                    {FIELD_ROW.map(x => (
+                      <Box key={x}>
+                        {getItem(x, y, snakeSegments)}
+                      </Box>
+                    ))}
                   </Box>
-                ))}
+                  ))}
               </Box>
-              ))}
-          </Box>
+            </Box>
         </Box>
     </Box>
   )
