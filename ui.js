@@ -24,14 +24,14 @@ let speed = 800;
 let gameOver = 0;
 let score = 0;
 
-function getItem(x, y, snakeSegments){
+function getItem(x, y, snakeSegments, color){
   if(x === food.x && y === food.y){
     return <Text color='red'> O </Text>
   }
 
   for(const segment of snakeSegments){
     if(x === segment.x && y === segment.y){
-      return <Text color='green'> x </Text>
+      return <Text color={color}> x </Text>
     }
   };
 
@@ -76,7 +76,7 @@ function endGame(){
   return null
 }
 
-const App = ({}) => {
+const App = ({color='green'}) => {
   const [snakeSegments, setSnakeSegments] = React.useState([
       { x: 8, y: 8 },
       { x: 8, y: 7 },
@@ -126,7 +126,7 @@ const App = ({}) => {
                   <Box key={y}>
                     {FIELD_ROW.map(x => (
                       <Box key={x}>
-                        {getItem(x, y, snakeSegments)}
+                        {getItem(x, y, snakeSegments, color)}
                       </Box>
                     ))}
                   </Box>
